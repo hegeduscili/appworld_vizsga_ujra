@@ -22,7 +22,8 @@ session_start();
     <div class="container pt-5">
         <?php
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-            $connection = mysqli_connect("localhost","root","","appworld_vizsga");
+            include('functions.php');
+
 
             $name_length = strlen($_POST["name"]);
             $errors = [];
@@ -43,30 +44,30 @@ session_start();
                 }
             }
             $password_length = strlen($_POST["password"]);
-        
-        if ($password_length < 4) {
-            $errors[] = 'A jelszónak legalább 4 karakterből kell állnia!<br>';
-        }
-        if ($_POST["password"] !== $_POST["password_confirmation"]) {
-            $errors[] = 'A két jelszó nem egyezik!<br>';
-        }
 
-        if (count($errors) > 0) {
-            $_SESSION["errors"] = $errors;
-            $_SESSION["post"] = $_POST;
-        } else {
-            $hashpass = password_hash($_POST["password"], PASSWORD_DEFAULT);
-            mysqli_query($connection, "INSERT INTO `users` (`name`, `email`, `password`) VALUES ('{$_POST["name"]}', '{$_POST["email"]}', '$hashpass')");
-        }
-        $err = mysqli_error($connection);
-        if ($err) {
-            die($err);
-        }
-        $_SESSION["success"] = 'Sikeres regisztráció!';
+            if ($password_length < 4) {
+                $errors[] = 'A jelszónak legalább 4 karakterből kell állnia!<br>';
+            }
+            if ($_POST["password"] !== $_POST["password_confirmation"]) {
+                $errors[] = 'A két jelszó nem egyezik!<br>';
+            }
+
+            if (count($errors) > 0) {
+                $_SESSION["errors"] = $errors;
+                $_SESSION["post"] = $_POST;
+            } else {
+                $hashpass = password_hash($_POST["password"], PASSWORD_DEFAULT);
+                mysqli_query($connection, "INSERT INTO `users` (`name`, `email`, `password`) VALUES ('{$_POST["name"]}', '{$_POST["email"]}', '$hashpass')");
+            }
+            $err = mysqli_error($connection);
+            if ($err) {
+                die($err);
+            }
+            $_SESSION["success"] = 'Sikeres regisztráció!';
 
 
-        header("location:" . $_SERVER["HTTP_REFERER"]);
-        exit;
+            header("location:" . $_SERVER["HTTP_REFERER"]);
+            exit;
         }
 
         if (isset($_SESSION["errors"])) {
@@ -78,10 +79,11 @@ session_start();
             unset($_SESSION["errors"]);
         } elseif (isset($_SESSION["success"])) {
             print '<div class="alert alert-success" role="alert">';
-            print $_SESSION["success"];
-            print '</div>';
+            foreach ($_SESSION["success"] as $succ) {
+                print $succ;
+                print '</div>';
+            }
         }
-
 
 
         ?>
