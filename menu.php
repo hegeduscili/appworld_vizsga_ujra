@@ -15,6 +15,27 @@
         <li class="nav-item">
           <a class="nav-link" href="#">Legtöbbször kattintott</a>
         </li>
+        <?php
+        if(!isset($_SESSION["user"])){
+          print ' <li class="nav-item">
+          <a class="nav-link" href="addcikk.php">Új cikk hozzáadása</a>
+        </li>
+
+          <li class="nav-item">
+          <a class="nav-link" href="register.php">Regisztráció</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="login.php">Bejelentkezés</a>
+        </li>';
+        }
+        if(isset($_SESSION["user"])){
+        print ' <li class="nav-item">
+        <a class="nav-link" href="logout.php">Kijelentkezés</a>
+      </li>';
+        }
+        ?>   
+      
+
       </ul>
     </div>
   </div>

@@ -23,10 +23,9 @@ session_start();
         <?php
         if ($_SERVER["REQUEST_METHOD"] === 'POST') {
             include('functions.php');
-
-
             $name_length = strlen($_POST["name"]);
             $errors = [];
+            $success = [];
 
             if ($name_length > 40 || $name_length < 3) {
                 $errors[] = 'A névnek, minimum 3, maximum 40 karakterből kell állnia!<br>';
@@ -77,13 +76,9 @@ session_start();
             }
             print '</div>';
             unset($_SESSION["errors"]);
-        } elseif (isset($_SESSION["success"])) {
-            print '<div class="alert alert-success" role="alert">';
-            foreach ($_SESSION["success"] as $succ) {
-                print $succ;
-                print '</div>';
-            }
-        }
+        } 
+
+
 
 
         ?>
@@ -92,19 +87,19 @@ session_start();
             <form method="POST" action="" class="row g-3">
                 <div class="col-12">
                     <label for="inputName" class="form-label">Név</label>
-                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Kérjük adja meg a nevét...">
+                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Kérjük adja meg a nevét..." value="<?php print $_SESSION["post"]["name"] ?? '' ?>">
                 </div>
                 <div class="col-md-12">
                     <label for="inputEmail" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Kérjük adja meg az email címét...">
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="Kérjük adja meg az email címét..." value="<?php print $_SESSION["post"]["email"] ?? '' ?>">
                 </div>
                 <div class="col-md-12">
                     <label for="inputPassword" class="form-label">Jelszó</label>
-                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Adja meg a jelszavát...">
+                    <input type="password" class="form-control" id="inputPassword" name="password" placeholder="Adja meg a jelszavát..." value="<?php print $_SESSION["post"]["password"] ?? '' ?>">
                 </div>
                 <div class="col-12">
                     <label for="inputPasswordConfirmation" class="form-label">Jelszó ismét</label>
-                    <input type="password" class="form-control" id="inputPasswordConfirmation" name="password_confirmation" placeholder="Adja meg a jelszavát ismét...">
+                    <input type="password" class="form-control" id="inputPasswordConfirmation" name="password_confirmation" placeholder="Adja meg a jelszavát ismét..." value="<?php print $_SESSION["post"]["password_confirmation"] ?? '' ?>">
                 </div>
                 <div class="col-12">
                     <button type="submit" class="btn btn-success" name="submitted">Regisztráció</button>
